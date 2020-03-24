@@ -13,7 +13,7 @@ Web remote console for arduino
 * go get -u github.com/go-delve/delve/cmd/dlv
 * dlv debug ./gowebarduino
 
-# dockerize (docker image size is 9.89MB)
+# dockerize
 * GOOS=linux GOARCH=386 go build (386 needed for busybox)
 * GOOS=linux GOARCH=arm GOARM=6 go build (Raspberry Pi build)
 * GOOS=linux GOARCH=arm64 go build (Odroid C2 build)
