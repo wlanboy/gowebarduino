@@ -13,15 +13,6 @@ Web remote console for arduino
 * go get -u github.com/go-delve/delve/cmd/dlv
 * dlv debug ./gowebarduino
 
-# dockerize
-* GOOS=linux GOARCH=386 go build (386 needed for busybox)
-* GOOS=linux GOARCH=arm GOARM=6 go build (Raspberry Pi build)
-* GOOS=linux GOARCH=arm64 go build (Odroid C2 build)
-* docker build -t gowebarduino .
-
-# run docker container
-*docker run -d -p 8000:8000 gowebarduino
-
 # calls
 * curl -X POST http://127.0.0.1:8000/api/v1/command -H 'Content-Type: application/json' -d '{"call": "3,2,21,github.com/wlanboy;"}'
 * curl -X GET http://127.0.0.1:8000/api/v1/command 
