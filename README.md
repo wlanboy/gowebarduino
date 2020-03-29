@@ -1,3 +1,5 @@
+![Go](https://github.com/wlanboy/gowebarduino/workflows/Go/badge.svg?branch=master)
+
 # gowebarduino
 Web remote console for arduino
 
