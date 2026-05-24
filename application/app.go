@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	arduino "../arduino"
+	arduino "github.com/wlanboy/gowebarduino/arduino"
 	"github.com/gorilla/mux"
 )
 
