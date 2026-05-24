@@ -2,7 +2,6 @@ package arduino
 
 import (
 	"io"
-	"log"
 	"time"
 
 	serial "github.com/tarm/serial"
@@ -15,20 +14,20 @@ type Arduino struct {
 }
 
 /*CreateConsole to an Arduino on Device ttyACM0*/
-func CreateConsole() Arduino {
+func CreateConsole() (Arduino, error) {
 	var arduino Arduino
 
 	c := &serial.Config{Name: "/dev/ttyACM0", Baud: 9600, ReadTimeout: time.Second * 5}
 	s, err := serial.OpenPort(c)
 	if err != nil {
-		log.Fatal(err)
+		return arduino, err
 	}
 	time.Sleep(1 * time.Second)
 
 	arduino.Console = s
 	arduino.Name = "Arudino Uno"
 
-	return arduino
+	return arduino, nil
 }
 
 /*WriteConsole on exportet Console*/
