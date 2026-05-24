@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	model "../model"
+	model "github.com/wlanboy/gowebarduino/model"
 )
 
 /*WriteJSONErrorResponse with content type and status code*/
