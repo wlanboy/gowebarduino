@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	arduino "../arduino"
-	model "../model"
+	arduino "github.com/wlanboy/gowebarduino/arduino"
+	model "github.com/wlanboy/gowebarduino/model"
 )
 
 /*PostCreate POST method*/
@@ -41,6 +41,6 @@ func (goservice *GoService) Get(w http.ResponseWriter, r *http.Request) {
 		WriteJSONErrorResponse(w, consoleerror.Error(), http.StatusInternalServerError)
 	} else {
 		command.Result = resp
-		WriteJSONResponse(w, &command, http.StatusCreated)
+		WriteJSONResponse(w, &command, http.StatusOK)
 	}
 }
