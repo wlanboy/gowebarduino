@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
 	arduino "github.com/wlanboy/gowebarduino/arduino"
 	model "github.com/wlanboy/gowebarduino/model"
 )
@@ -18,29 +19,45 @@ func (goservice *GoService) PostCreate(w http.ResponseWriter, r *http.Request) {
 		log.Println("Cannot parse JSON")
 		log.Println(err)
 		WriteJSONErrorResponse(w, "Cannot parse JSON", http.StatusBadRequest)
-	} else {
-		consoleerror := arduino.WriteConsole(command.Call, goservice.Console)
-		if consoleerror != nil {
-			log.Println("Console error")
-			log.Println(consoleerror)
-			WriteJSONErrorResponse(w, consoleerror.Error(), http.StatusInternalServerError)
-		} else {
-			WriteJSONResponse(w, &command, http.StatusCreated)
-		}
+		return
 	}
+
+	if message, valid := command.Validate(); !valid {
+		WriteJSONErrorResponse(w, message, http.StatusBadRequest)
+		return
+	}
+
+	if goservice.Console == nil {
+		WriteJSONErrorResponse(w, "Arduino console is not available", http.StatusServiceUnavailable)
+		return
+	}
+
+	consoleerror := arduino.WriteConsole(command.Call, goservice.Console)
+	if consoleerror != nil {
+		log.Println("Console error")
+		log.Println(consoleerror)
+		WriteJSONErrorResponse(w, consoleerror.Error(), http.StatusInternalServerError)
+		return
+	}
+	WriteJSONResponse(w, &command, http.StatusCreated)
 }
 
 /*Get method*/
 func (goservice *GoService) Get(w http.ResponseWriter, r *http.Request) {
 	command := model.Command{}
 
-	resp,consoleerror := arduino.ReadConsole(goservice.Console)
+	if goservice.Console == nil {
+		WriteJSONErrorResponse(w, "Arduino console is not available", http.StatusServiceUnavailable)
+		return
+	}
+
+	resp, consoleerror := arduino.ReadConsole(goservice.Console)
 	if consoleerror != nil {
 		log.Println("Console error")
 		log.Println(consoleerror)
 		WriteJSONErrorResponse(w, consoleerror.Error(), http.StatusInternalServerError)
-	} else {
-		command.Result = resp
-		WriteJSONResponse(w, &command, http.StatusOK)
+		return
 	}
+	command.Result = resp
+	WriteJSONResponse(w, &command, http.StatusOK)
 }
