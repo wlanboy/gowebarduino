@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	arduino "github.com/wlanboy/gowebarduino/arduino"
 	"github.com/gorilla/mux"
+	arduino "github.com/wlanboy/gowebarduino/arduino"
 )
 
 /*GoService containing router and database*/
@@ -40,7 +40,7 @@ func (goservice *GoService) Run() {
 
 	go func() {
 		log.Println("Starting http server...")
-		if err := goservice.Server.ListenAndServe(); err != nil {
+		if err := goservice.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)
 		}
 	}()

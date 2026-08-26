@@ -2,7 +2,6 @@ package application
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	model "github.com/wlanboy/gowebarduino/model"
@@ -12,7 +11,7 @@ import (
 func WriteJSONErrorResponse(w http.ResponseWriter, message string, status int) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
-	fmt.Fprintf(w, `{ "error": "%s" }`, message)
+	json.NewEncoder(w).Encode(map[string]string{"error": message})
 }
 
 /*WriteJSONResponse with content type and status code*/

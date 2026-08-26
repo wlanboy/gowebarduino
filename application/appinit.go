@@ -3,8 +3,8 @@ package application
 import (
 	"log"
 
-	arduino "github.com/wlanboy/gowebarduino/arduino"
 	"github.com/gorilla/mux"
+	arduino "github.com/wlanboy/gowebarduino/arduino"
 )
 
 /*Initialize app router and configuration*/
@@ -19,6 +19,5 @@ func (goservice *GoService) Initialize() {
 		log.Printf("Warning: could not open Arduino serial port: %v", err)
 		return
 	}
-	goservice.Console = &console
+	goservice.Console = console
 }
-
