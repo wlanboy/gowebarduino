@@ -2,6 +2,7 @@ package arduino
 
 import (
 	"io"
+	"sync"
 	"time"
 
 	serial "github.com/tarm/serial"
@@ -11,16 +12,17 @@ import (
 type Arduino struct {
 	Name    string
 	Console io.ReadWriteCloser
+	mu      sync.Mutex
 }
 
 /*CreateConsole to an Arduino on Device ttyACM0*/
-func CreateConsole() (Arduino, error) {
-	var arduino Arduino
+func CreateConsole() (*Arduino, error) {
+	arduino := &Arduino{}
 
 	c := &serial.Config{Name: "/dev/ttyACM0", Baud: 9600, ReadTimeout: time.Second * 5}
 	s, err := serial.OpenPort(c)
 	if err != nil {
-		return arduino, err
+		return nil, err
 	}
 	time.Sleep(1 * time.Second)
 
@@ -34,6 +36,9 @@ func CreateConsole() (Arduino, error) {
 func WriteConsole(command string, arduino *Arduino) error {
 	var consoleerror error
 
+	arduino.mu.Lock()
+	defer arduino.mu.Unlock()
+
 	_, err := arduino.Console.Write([]byte(command))
 	if err != nil {
 		consoleerror = err
@@ -45,6 +50,9 @@ func WriteConsole(command string, arduino *Arduino) error {
 func ReadConsole(arduino *Arduino) (string, error) {
 	var returnstring string
 	var consoleerror error
+
+	arduino.mu.Lock()
+	defer arduino.mu.Unlock()
 
 	buf := make([]byte, 128)
 	number, err := arduino.Console.Read(buf)
