@@ -1,0 +1,5 @@
+# Allowlist: das Dockerfile kopiert nur das vorab gebaute Binary.
+# Alles andere bleibt aus dem Build-Kontext draußen.
+*
+
+!gowebarduino
